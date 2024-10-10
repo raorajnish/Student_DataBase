@@ -1,0 +1,109 @@
+{% extends 'layout.html' %}
+
+{% block title %}{{ classlist.title }}{% endblock %}
+
+{% block content %}
+<div id="classpage">
+    <div class="part" id="part-1">
+        <div id="part11">
+            <h3>{{ classlist.branch }}</h3>
+            <h1>{{ classlist.slug }}</h1>
+        </div>
+        <div id="part12">
+            <h4>Batch: {{ classlist.academic_year }}</h4>
+            <a href="{% url 'myclass:class_students' classlist.slug %}" >
+                <i class="ri-arrow-right-up-line"></i>
+            </a>
+        </div>
+    </div>
+
+    <div id="students-page-part1">
+        <h2 style="margin-bottom: 2vh; border-bottom: 2px solid #fff">
+          Students in {{ classlist.title }}
+        </h2>
+        {% if students %}
+        <div id="students-list">
+            <table style="font-family:monospace;font-weight: 700;font-size:2.5vh">
+                <tr style="text-align: left;text-shadow: 4px 4px 5px rgba(0, 0, 0, 1);">
+                    <th>Sr.No</th>
+                    <th>Name</th>
+                    <th>PNR</th>
+                    <th>CIA Marks</th>
+                    <th>CIAP Marks</th>
+                    <th>MSE Marks</th>
+                    <th>CGPA</th>
+                </tr>
+                {% for student in students %}
+                <tr style="color:black;">
+                    <td>{{ student.srno }}</td>
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.prn }}</td>
+                    <td>{{ student.cia_marks }}</td>
+                    <td>{{ student.ciap_marks }}</td>
+                    <td>{{ student.mse_marks }}</td>
+                    <td>{{ student.cgpa }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <p>No students available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% comment %} {% extends 'layout.html' %} 
+
+{% block title %}{{ classlist.title }}{% endblock %} 
+
+{% block content %}
+<div id="classpage">
+    <div class="part" id="part-1">
+        <div id="part11">
+            <h3>{{ classlist.branch }}</h3>
+            <h1>{{ classlist.slug }}</h1>
+        </div>
+        <div id="part12">
+            <h4>Batch: {{ classlist.academic_year }}</h4>
+            <a href="{% url 'myclass:class_students' classlist.slug %}" >
+                <i class="ri-arrow-right-up-line"></i>
+            </a>
+        </div>
+    </div>
+
+     <div id="students-page-part1">
+    <h2 style="margin-bottom: 2vh; border-bottom: 2px solid #fff">
+      Students in {{ post.title }}
+    </h2>
+    {% if students %}
+    <div id="students-list">
+     <table style="font-family:monospace;font-weight: 700;font-size:2.5vh">
+    <tr style="text-align: left;text-shadow: 4px 4px 5px rgba(0, 0, 0, 1);">
+        <th>Sr.No</th>
+        <th>Name</th>
+        <th>PNR</th>
+        <th>CGPA</th>
+    </tr>
+    {% for student in students %}
+    <tr style="color:black;">
+        <td>{{ student.srno }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.prn }}</td>
+        <td>N/A</td> 
+    </tr>
+    {% endfor %}
+</table>
+</div>
+    {% else %}
+    <p>No students available.</p>
+    {% endif %} 
+
+
+  </div>
+    <!-- This content is preserved and appears once -->
+</div>
+{% endblock %} {% endcomment %}

@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block title %}Enter CIA Marks{% endblock %}
+
+{% block content %}
+    <h1>CIA Marks Entry</h1>
+        <form class="form-with-validation" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+        <a href="{% url 'myclass:list' %}">Back to Class List</a>
+{% endblock %}

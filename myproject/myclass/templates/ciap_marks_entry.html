@@ -1,0 +1,179 @@
+{% extends 'layout.html' %}
+
+{% block title %}Enter CIA Marks{% endblock %}
+
+{% block content %}
+
+<h1>CIAP Marks Entry</h1>
+
+<form class="form-with-validation" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+<a href="{% url 'myclass:list' %}">Back to Class List</a>
+
+{% comment %} <div id="form-back">
+    <h2>Enter CIAP Marks for {{ student.name }}</h2>
+
+    <form class="form-with-validation" method="post">
+        {% csrf_token %}
+        
+        <div>
+            <label for="ciap_attendance">CIAP Attendance:</label>
+            <input type="number" name="attendance" id="ciap_attendance" required>
+
+            <label for="writeup_and_experiment">Writeup and Experimentation</label>
+            <input type="number" name="writeup" id="writeup_and_experiment" required>
+        </div>
+
+        <div class="form-group">
+            <label for="component1-selector">Select Component 1</label>
+            <select id="component1-selector" class="form-control" name="component1" required>
+                <option value="">-- Select Component 1 --</option>
+                <option value="powerpoint">PowerPoint Presentation</option>
+                <option value="group_discussion">Group Discussion</option>
+                <option value="quiz">Quiz</option>
+                <option value="seminar_presentation">Seminar Presentation</option>
+                <option value="case_study">Case Study</option>
+                <option value="design_thinking">Design Thinking</option>
+                <option value="innovation">Innovation</option>
+                <option value="others">Others</option>
+            </select>
+        </div>
+
+        <div id="component1-form"></div>
+
+        <div class="form-group">
+            <label for="component2-selector">Select Component 2</label>
+            <select id="component2-selector" class="form-control" name="component2" required>
+                <option value="">-- Select Component 2 --</option>
+                <option value="powerpoint">PowerPoint Presentation</option>
+                <option value="group_discussion">Group Discussion</option>
+                <option value="quiz">Quiz</option>
+                <option value="seminar_presentation">Seminar Presentation</option>
+                <option value="case_study">Case Study</option>
+                <option value="design_thinking">Design Thinking</option>
+                <option value="innovation">Innovation</option>
+                <option value="others">Others</option>
+            </select>
+        </div>
+
+        <div id="component2-form"></div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <a href="{% url 'myclass:list' %}">Back to Class List</a>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const components = {
+            'powerpoint': [
+                {label: 'Content', maxMarks: 4},
+                {label: 'Organisation', maxMarks: 4},
+                {label: 'Design', maxMarks: 4},
+                {label: 'Delivery', maxMarks: 4},
+                {label: 'Audience Engagement', maxMarks: 2},
+                {label: 'Q&A Handling', maxMarks: 2},
+            ],
+            'group_discussion': [
+                {label: 'Content Knowledge', maxMarks: 5},
+                {label: 'Communication Skills', maxMarks: 5},
+                {label: 'Participation & Contribution', maxMarks: 5},
+                {label: 'Collaboration & Teamwork', maxMarks: 5},
+            ],
+            'quiz': [
+                {label: 'MCQ (Section 1)', maxMarks: 10},
+                {label: 'Short Answer Questions (Section 2)', maxMarks: 10},
+            ],
+            'seminar_presentation': [
+                {label: 'Content', maxMarks: 5},
+                {label: 'Organisation', maxMarks: 5},
+                {label: 'Presentation Skills', maxMarks: 5},
+                {label: 'Visual Aids', maxMarks: 3},
+                {label: 'Response to Questions', maxMarks: 2},
+            ],
+            'case_study': [
+                {label: 'Understanding', maxMarks: 4},
+                {label: 'Analysis & Application', maxMarks: 5},
+                {label: 'Solution & Recommendation', maxMarks: 4},
+                {label: 'Organisation & Structure', maxMarks: 3},
+                {label: 'Clarity & Writing Quality', maxMarks: 2},
+                {label: 'References & Citation', maxMarks: 2},
+            ],
+            'design_thinking': [
+                {label: 'Empathy & Problem Detection', maxMarks: 4},
+                {label: 'Ideation & Prototyping', maxMarks: 4},
+                {label: 'Testing & Feedback', maxMarks: 4},
+                {label: 'Reflection & Iteration', maxMarks: 4},
+            ],
+            'innovation': [
+                {label: 'Originality', maxMarks: 4},
+                {label: 'Relevance & Impact', maxMarks: 4},
+                {label: 'Feasibility', maxMarks: 4},
+                {label: 'Implementation Strategy', maxMarks: 4},
+                {label: 'Creativity & Problem Solving', maxMarks: 4},
+            ],
+            'others': [
+                {label: 'Others', maxMarks: 20},
+            ]
+        };
+
+        function handleComponentSelection(selector, form, componentKey) {
+            const selectedComponent = selector.value;
+            form.innerHTML = '';
+            if (components[selectedComponent]) {
+                components[selectedComponent].forEach((subcomponent, index) => {
+                    form.innerHTML += `
+                        <div class="form-group">
+                            <label>${subcomponent.label} (Max: ${subcomponent.maxMarks} marks)</label>
+                            <input type="number" class="form-control subcomponent-mark" data-max="${subcomponent.maxMarks}" name="${componentKey}_subcomponent_${index}" required>
+                        </div>`;
+                });
+                form.innerHTML += `
+                    <div class="form-group">
+                        <label>Total Marks</label>
+                        <input type="number" class="form-control" id="${componentKey}-total-marks" name="${componentKey}_total_marks" readonly>
+                    </div>`;
+            }
+
+            const subcomponentMarks = form.querySelectorAll('.subcomponent-mark');
+            subcomponentMarks.forEach(input => {
+                input.addEventListener('input', () => {
+                    calculateTotalMarks(subcomponentMarks, `${componentKey}-total-marks`);
+                });
+            });
+        }
+
+        function calculateTotalMarks(inputs, totalMarksId) {
+            let total = 0;
+            inputs.forEach(input => {
+                const max = parseFloat(input.getAttribute('data-max'));
+                const value = parseFloat(input.value) || 0;
+                if (value > max) {
+                    alert(`Marks for ${input.previousElementSibling.textContent} cannot exceed ${max}`);
+                    input.value = max;
+                }
+                total += parseFloat(input.value) || 0;
+            });
+            document.getElementById(totalMarksId).value = total;
+        }
+
+        const component1Selector = document.getElementById('component1-selector');
+        const component1Form = document.getElementById('component1-form');
+        const component2Selector = document.getElementById('component2-selector');
+        const component2Form = document.getElementById('component2-form');
+
+        component1Selector.addEventListener('change', () => {
+            handleComponentSelection(component1Selector, component1Form, 'component1');
+        });
+
+        component2Selector.addEventListener('change', () => {
+            handleComponentSelection(component2Selector, component2Form, 'component2');
+        });
+    });
+</script> {% endcomment %}
+{% endblock %}

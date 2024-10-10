@@ -1,0 +1,63 @@
+{% extends 'layout.html' %} {% block title %}{{ class_instance.title }}{% endblock %} 
+
+{% block content %}
+<div id="students-page">
+  <div class="student-banner">
+    <h1>{{ class_instance.title }}</h1>
+    <p><strong>Subject:</strong> {{ class_instance.subject }}</p>
+    <p><strong>Subject Teacher:</strong> {{ class_instance.author }}</p>
+    <p><strong>Academic Year:</strong> {{ class_instance.academic_year }}</p>
+    <p><strong>Branch:</strong> {{ class_instance.branch }}</p>
+    <button id="extract-button" onclick="Functionexcel">Extract Student Data</button>
+  </div>
+
+  <div id="students-page-part1">
+    <h2 style="margin-bottom: 2vh; border-bottom: 2px solid #fff">
+      Students in {{ class_instance.title }}
+    </h2>
+    {% if students %}
+    <div id="students-list">
+     <table style="font-family:monospace;font-weight: 700;font-size:2.5vh">
+    <tr style="text-align: left;text-shadow: 4px 4px 5px rgba(0, 0, 0, 1);">
+        <th>Sr.No</th>
+        <th>Name</th>
+        <th>PNR</th>
+        <th colspan="3">Update Marks</th>
+    </tr>
+    {% for student in students %}
+    <tr style="color:black;">
+        <td>{{ student.srno }}</td>
+        <td>{{ student.name }}</td>
+        <td>{{ student.prn }}</td>
+        <td><a href="{% url 'myclass:marks_entry' class_instance.slug student.pk %}">ESE/ESEP</a>
+</td>   <!-- Link to ESE/ESEP form -->
+        <td><a href="{% url 'myclass:cia_marks_entry' class_instance.slug student.pk %}">CIA</a>
+</td>    <!-- Link to CIA form -->
+        <td><a href="{% url 'myclass:ciap_marks_entry' class_instance.slug student.pk %}">CIAP</a>
+</td>  <!-- Link to CIAP form -->
+    </tr>
+    {% endfor %}
+</table>
+</div>
+    {% else %}
+    <p>No students available.</p>
+    {% endif %} 
+
+
+  </div>
+
+  <div id="students-page-part2">
+    <h3>Add Student</h3>
+    <form
+      class="form-with-validation"
+      method="post"
+      action="{% url 'myclass:class_students' class_instance.slug %}"
+    >
+      {% csrf_token %} {{ form.as_p }}
+      <button type="submit">Add Student</button>
+    </form>
+
+    <a href="{% url 'myclass:list' %}">Back to Class List</a>
+  </div>
+</div>
+{% endblock %}

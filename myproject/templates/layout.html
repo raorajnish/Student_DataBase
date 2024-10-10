@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} Django App {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <script src="{% static 'script.js' %}" defer></script>
+  </head>
+  <body>
+    <nav id="nav">
+      <div id="nav1">
+        {% comment %} <img id="nav-logo" src="./media/sakec.jpg" alt="sakec-logo" srcset=""> {% endcomment %}
+        <i class="ri-git-repository-fill"></i>
+        <h1>Academic Grading System</h1>
+      </div>
+      <div id="nav2">
+        <a href="/" >Home</a>
+        <a href="/about">About</a>
+        {% comment %} <a href="{% url 'myclass:list'%}">Class List</a> {% endcomment %}
+        {% if user.is_authenticated %}
+          <a href="{% url 'myclass:new-class'%}">New Class</a>
+          <form action="{% url 'users:logout'%}" method="post">
+            {% csrf_token %}
+            <button class="logout-button">Logout</button>
+          </form>
+        {% else %}
+          {% comment %} <a href="{% url 'users:login'%}">Login</a> {% endcomment %}
+          <a href="{% url 'users:register'%}">Register</a>
+        {% endif %}
+
+      </div>
+    </nav>
+    <main>
+      {% block content %}
+      <!-- Content goes here -->
+      {% endblock %}
+    </main>
+  </body>
+</html>

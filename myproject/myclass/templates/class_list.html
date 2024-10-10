@@ -1,0 +1,46 @@
+{% extends 'layout.html' %} {% block title %}Class{% endblock %} 
+{% block content %}
+<div id="classlist-main">
+  <div id="classlist">
+    <h1>Assigned Classes</h1>
+    <div id="post-container">
+      {% for classlist in classlists %}
+      <a href="{% url 'myclass:page' slug=classlist.slug %}"
+        ><article class="post">
+          <!-- Changed from id to class for uniqueness -->
+          <h2>{{ classlist.title }}</h2>
+          <p>Subject: {{ classlist.subject }}</p>
+          <p>{{ classlist.branch }}</p>
+          <p>{{ classlist.academic_year }}</p>
+        </article></a
+      >
+      {% empty %}
+      <h2>No classes found.</h2>
+      <!-- Handles the case where no data is available -->
+      {% endfor %}
+    </div>
+  </div>
+  <div id="classlistside">
+    <div id="notices">
+      <h2>Notices</h2>
+      <span
+        >This is sample notice.and i want to make sure everything is right</span
+      >
+      <span>This is sample notice.</span>
+      <span>This is sample notice.</span>
+      <span>This is sample notice.</span>
+    </div>
+    <div id="queries">
+      <h2>Queries:</h2>
+      <form action="">
+        <input
+          type="text"
+          name=""
+          id=""
+          placeholder="Ask your queries here..."
+        />
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

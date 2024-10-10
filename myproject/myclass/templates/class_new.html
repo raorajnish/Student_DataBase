@@ -1,0 +1,14 @@
+{% extends 'layout.html' %} 
+
+{% block title %}New Class{% endblock %} 
+
+{% block content %}
+    <section id="new-class">
+        <h1>Add New Class</h1>
+        <form class="form-with-validation" action="{% url 'myclass:new-class' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit">Add Class</button>
+        </form>
+    </section>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+
+{% block title %}Enter ESE/ESEP Marks{% endblock %}
+
+{% block content %}
+<h2>Enter ESE/ESEP Marks</h2>
+
+<form class="form-with-validation" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<a href="{% url 'myclass:list' %}">Back to Class List</a>
+{% endblock %}

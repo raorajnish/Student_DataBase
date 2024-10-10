@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+  Home
+{%  endblock %}
+
+{% block content %}
+        <div id="hero">
+            <div id="hero-text">
+                <h1>Welcome to the <br>Academic Grading System</h1>
+                <p>This platform is designed to help Teachers manage their students grades effectively.</p>
+                
+                {% if user.is_authenticated %}
+                  <p>Happy Grading!! <a href="{% url 'myclass:list'%}"><i class="ri-arrow-right-up-line"></i></a></p>
+                {% else %}
+                  <a href="{% url 'users:login' %}"><button class="btn">Faculty Login</button></a>
+                {% endif %}
+
+                
+                
+            </div>
+        </div>
+{% endblock %}

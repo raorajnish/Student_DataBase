@@ -1,0 +1,15 @@
+{% extends 'layout.html' %} {% block title %}User Login{% endblock %}
+{% block content %}
+<div id="register-body">
+  <h1>User Login</h1>
+  <form class="form-with-validation" action="/users/login/" method="post">
+    {% csrf_token %}
+    <!-- CSRF protection -->
+    {{ form }}
+    {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}" />
+    {% endif %}
+    <button type="submit">Login</button>
+  </form>
+</div>
+{% endblock %}
